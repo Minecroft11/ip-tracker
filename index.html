@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Speed Test</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .info { background: #f0f8ff; padding: 15px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>📊 Internet Speed Test</h1>
+    <p>Testing your connection...</p>
+    
+    <div class="info">
+        <h3>Your Connection Info:</h3>
+        <div id="ip">Finding your IP...</div>
+        <div id="browser">Checking browser...</div>
+    </div>
+
+    <script>
+        // Простой скрипт для получения IP
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip').innerHTML = '<strong>IP Address:</strong> ' + data.ip;
+                document.getElementById('browser').innerHTML = '<strong>Browser:</strong> ' + navigator.userAgent;
+                
+                // Сохраняем в localStorage чтобы ты мог посмотреть
+                localStorage.setItem('lastVisitorIP', data.ip);
+                localStorage.setItem('lastVisitorUA', navigator.userAgent);
+                localStorage.setItem('lastVisitTime', new Date().toString());
+                
+                alert('Speed test complete! Your IP: ' + data.ip);
+            })
+            .catch(error => {
+                document.getElementById('ip').innerHTML = 'Could not get IP';
+            });
+    </script>
+</body>
+</html>
